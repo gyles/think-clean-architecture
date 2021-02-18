@@ -1,36 +1,70 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
 plugins {
-	id 'org.springframework.boot' version '2.4.3'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
+	id 'org.springframework.boot' version "$springBootVersion" apply false
+	id 'eclipse'
+	id 'idea'
 }
 
-group = 'com.think'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
-
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
+allprojects {
+	repositories {
+		mavenCentral()
 	}
 }
 
-repositories {
-	mavenCentral()
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'io.spring.dependency-management'
+
+	sourceCompatibility = JavaVersion.VERSION_11
+	group = 'com.think'
+	version = '0.0.1-SNAPSHOT'
+
+	dependencyManagement {
+		imports {
+			mavenBom SpringBootPlugin.BOM_COORDINATES
+		}
+	}
+
+	test {
+		useJUnitPlatform()
+	}
+
+	dependencies {
+		testImplementation "org.assertj:assertj-core"
+		testImplementation "org.mockito:mockito-core"
+		testImplementation "org.mockito:mockito-junit-jupiter"
+		testImplementation "org.junit.jupiter:junit-jupiter-api"
+		testImplementation "org.junit.jupiter:junit-jupiter-params"
+		testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
+	}
 }
 
-dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'com.h2database:h2'
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
+project(':domain') {
+	dependencies {
+		compileOnly "org.projectlombok:lombok"
+		annotationProcessor "org.projectlombok:lombok"
+	}
 }
 
-test {
-	useJUnitPlatform()
+project(':simple-application') {
+	dependencies {
+		implementation project(':domain')
+
+		implementation 'org.springframework.boot:spring-boot-starter-actuator'
+		implementation 'org.springframework.boot:spring-boot-starter-web'
+		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+		implementation 'org.springframework.boot:spring-boot-starter-security'
+		implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+
+
+		implementation 'com.h2database:h2'
+		compileOnly 'org.projectlombok:lombok'
+		annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+		annotationProcessor 'org.projectlombok:lombok'
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+		testImplementation 'org.springframework.security:spring-security-test'
+	}
 }
+
+
