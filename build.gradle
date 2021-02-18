@@ -48,6 +48,21 @@ project(':domain') {
 }
 
 project(':simple-application') {
+	apply plugin: 'org.springframework.boot'
+	apply plugin: 'application'
+
+	sourceSets {
+		integrationTest {
+			compileClasspath += sourceSets.main.output
+			runtimeClasspath += sourceSets.main.output
+		}
+	}
+
+	configurations {
+		integrationTestImplementation.extendsFrom implementation
+		integrationTestRuntimeOnly.extendsFrom runtimeOnly
+	}
+
 	dependencies {
 		implementation project(':domain')
 
@@ -64,7 +79,26 @@ project(':simple-application') {
 		annotationProcessor 'org.projectlombok:lombok'
 		testImplementation 'org.springframework.boot:spring-boot-starter-test'
 		testImplementation 'org.springframework.security:spring-security-test'
+
+		integrationTestRuntimeOnly 'com.h2database:h2'
+		integrationTestImplementation('org.springframework.boot:spring-boot-starter-test') {
+			exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+		}
+		integrationTestImplementation 'org.springframework.security:spring-security-test'
 	}
+
+	task integrationTest(type: Test) {
+		description = 'Run integration tests.'
+		group = 'verification'
+
+		useJUnitPlatform()
+
+		testClassesDirs = sourceSets.integrationTest.output.classesDirs
+		classpath = sourceSets.integrationTest.runtimeClasspath
+		shouldRunAfter test
+	}
+
+	check.dependsOn integrationTest
 }
 
 
