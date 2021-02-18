@@ -1,4 +1,4 @@
-package com.think;
+package com.think.clean;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

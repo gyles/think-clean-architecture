@@ -6,6 +6,11 @@ plugins {
 	id 'idea'
 }
 
+ext {
+	springdocOpenApi = '1.5.4'
+	liquibaseCore = '4.3.1'
+}
+
 allprojects {
 	repositories {
 		mavenCentral()
@@ -66,19 +71,22 @@ project(':simple-application') {
 	dependencies {
 		implementation project(':domain')
 
+		compileOnly "org.projectlombok:lombok"
+		annotationProcessor "org.projectlombok:lombok"
+		annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
 		implementation 'org.springframework.boot:spring-boot-starter-actuator'
 		implementation 'org.springframework.boot:spring-boot-starter-web'
 		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 		implementation 'org.springframework.boot:spring-boot-starter-security'
 		implementation 'org.springframework.boot:spring-boot-starter-hateoas'
 
-
-		implementation 'com.h2database:h2'
-		compileOnly 'org.projectlombok:lombok'
 		annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-		annotationProcessor 'org.projectlombok:lombok'
-		testImplementation 'org.springframework.boot:spring-boot-starter-test'
-		testImplementation 'org.springframework.security:spring-security-test'
+		runtimeOnly 'com.h2database:h2'
+
+		implementation "org.springdoc:springdoc-openapi-ui:$springdocOpenApi"
+		implementation "org.springdoc:springdoc-openapi-hateoas:$springdocOpenApi"
+		implementation "org.liquibase:liquibase-core:$liquibaseCore"
 
 		integrationTestRuntimeOnly 'com.h2database:h2'
 		integrationTestImplementation('org.springframework.boot:spring-boot-starter-test') {
