@@ -2,7 +2,7 @@
  * Copyright Stuff Limited
  */
 
-package com.think.clean.configuration.usecase.security;
+package com.think.clean.configuration.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

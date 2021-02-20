@@ -19,6 +19,7 @@ public class LogItemDto extends RepresentationModel<LogItemDto> {
     private String userId;
     private String action;
     private String url;
+    private PayloadDto payload;
 
     @Data
     public static class PayloadDto {

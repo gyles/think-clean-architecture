@@ -4,6 +4,7 @@
 
 package com.think.clean.web.rest.log;
 
+import com.think.clean.common.mapper.log.LogItemMapper;
 import com.think.clean.domain.entity.log.LogItem;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
@@ -20,7 +21,7 @@ public class LogItemAssembler extends RepresentationModelAssemblerSupport<LogIte
 
     @Override
     public LogItemDto toModel(LogItem logItem) {
-        return logItemMapper.toDto(logItem);
+        return logItemMapper.domainToDto(logItem);
     }
 
 }

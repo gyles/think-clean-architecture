@@ -6,18 +6,27 @@ package com.think.clean.domain.entity.log;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import java.time.Instant;
 
 @Data
-@RequiredArgsConstructor
+@NoArgsConstructor
 @AllArgsConstructor
 public class LogItem {
 
-    private final Instant created;
-    private final String userId;
-    private final String action;
-    private final String url;
+    private String id;
+    private Instant created;
+    private String userId;
+    private String action;
+    private String url;
     private Payload payload;
+
+    public LogItem(Instant created, String userId, String action, String url) {
+        this(created, userId, action, url, null);
+    }
+
+    public LogItem(Instant created, String userId, String action, String url, Payload payload) {
+        this(null, created, userId, action, url, payload);
+    }
 
 }
