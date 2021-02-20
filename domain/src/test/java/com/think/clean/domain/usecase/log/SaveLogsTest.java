@@ -28,14 +28,14 @@ import static org.mockito.Mockito.never;
 @ExtendWith(MockitoExtension.class)
 public class SaveLogsTest {
 
-    private SaveLogs useCase;
+    private SaveLogs<List<LogItem>, String, String> useCase;
 
     @Mock
-    private LogGateway logGateway;
+    private LogGateway<List<LogItem>, String, String> logGateway;
 
     @BeforeEach
     void prepareUseCase() {
-        useCase = new SaveLogs(logGateway);
+        useCase = new SaveLogs<>(logGateway);
     }
 
     @Nested

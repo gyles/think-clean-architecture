@@ -11,9 +11,9 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 
 @RequiredArgsConstructor
-public class SaveLogs {
+public class SaveLogs<T extends Iterable<LogItem>, U, V> {
 
-    private final LogGateway logGateway;
+    private final LogGateway<T, U , V> logGateway;
 
     public void saveLogs(List<LogItem> logs) {
         if (logs.isEmpty()) {

@@ -7,8 +7,11 @@ plugins {
 }
 
 ext {
-	springdocOpenApi = '1.5.4'
-	liquibaseCore = '4.3.1'
+	liquibase = '4.3.1'
+	lombok = '1.18.18'
+	mapstruct = '1.4.2.Final'
+	rsqlJpa = '5.0.9'
+	springdocOpenapi = '1.5.4'
 }
 
 allprojects {
@@ -71,9 +74,10 @@ project(':simple-application') {
 	dependencies {
 		implementation project(':domain')
 
-		compileOnly "org.projectlombok:lombok"
-		annotationProcessor "org.projectlombok:lombok"
-		annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+		compileOnly "org.projectlombok:lombok:$lombok"
+		annotationProcessor "org.projectlombok:lombok:$lombok"
+		implementation "org.mapstruct:mapstruct:$mapstruct"
+		annotationProcessor "org.mapstruct:mapstruct-processor:$mapstruct"
 
 		implementation 'org.springframework.boot:spring-boot-starter-actuator'
 		implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -81,18 +85,24 @@ project(':simple-application') {
 		implementation 'org.springframework.boot:spring-boot-starter-security'
 		implementation 'org.springframework.boot:spring-boot-starter-hateoas'
 
+		implementation "io.github.perplexhub:rsql-jpa-spring-boot-starter:$rsqlJpa"
+
 		annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 		runtimeOnly 'com.h2database:h2'
 
-		implementation "org.springdoc:springdoc-openapi-ui:$springdocOpenApi"
-		implementation "org.springdoc:springdoc-openapi-hateoas:$springdocOpenApi"
-		implementation "org.liquibase:liquibase-core:$liquibaseCore"
+		implementation "org.springdoc:springdoc-openapi-ui:$springdocOpenapi"
+		implementation "org.springdoc:springdoc-openapi-hateoas:$springdocOpenapi"
+		implementation "org.liquibase:liquibase-core:$liquibase"
 
 		integrationTestRuntimeOnly 'com.h2database:h2'
 		integrationTestImplementation('org.springframework.boot:spring-boot-starter-test') {
 			exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 		}
 		integrationTestImplementation 'org.springframework.security:spring-security-test'
+	}
+
+	compileJava {
+		options.compilerArgs = ['-Amapstruct.defaultComponentModel=spring']
 	}
 
 	task integrationTest(type: Test) {
